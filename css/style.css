@@ -1,10 +1,14 @@
 body {
     background-color: paleturquoise;
+    /* position: relative; */
 }
 
+/* h1 {
+    text-align: center;
+} */
 
 .cell {
-    background: radial-gradient(circle, rgba(238,174,202,1) 0%, rgba(148,187,233,1));
+    background: radial-gradient(circle, rgba(238, 174, 202, 1) 0%, rgba(148, 187, 233, 1));
     width: 40px;
     height: 40px;
     border: 2px solid transparent;
@@ -14,3 +18,8 @@ body {
 .cell:hover {
     border: 2px solid pink;
 }
+
+/* table { */
+    /* position: fixed; */
+    /* max-width: 50%; */
+/* } */

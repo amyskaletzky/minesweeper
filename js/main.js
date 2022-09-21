@@ -45,23 +45,25 @@ function buildBoard() {
         for (var j = 0; j < gLevel.SIZE; j++) {
             board[i][j] = {
                 minesAroundCount: 4,
-                isShown: true,              // later change to false
+                isShown: false,             
                 isMine: false,
                 isMarked: true,
             }
             cellCount++
-            setMinesNegsCount(board, i, j)
+
+            
         }
-
     }
+    
+   
+    if (board[1][3].isShown) board[1][3].isMine = true
+    if (board[2][2].isShown) board[2][2].isMine = true
 
+   
     for (var i = 0; i < gLevel.SIZE; i++) {
         for (var j = 0; j < gLevel.SIZE; j++) {
-            if (board[i][j].isShown) {
-                board[1][3].isMine = true
-                board[2][2].isMine = true
-            }
-
+        setMinesNegsCount(board, i, j)
+        
         }
     }
 
@@ -69,57 +71,33 @@ function buildBoard() {
     return board
 }
 
-function setMinesNegsCount(board, i, j) {
-    console.log(board)
-    // var count = 0
-    if (!board[i][j].isMine) {
-        console.log('not a mine');
-    } else {
-        console.log('!!!mine');
+function setMinesNegsCount(board, x, y) {
+    // console.log(board[x][y].isMine)
+    var count = 0
 
+    if (!board[x][y].isMine) {
+        for (var i = x - 1; i <= x + 1; i++) {
+            if (i < 0 || i >= gLevel.SIZE) continue
+            for (var j = y - 1; j <= y + 1; j++) {
+                if (j < 0 || j >= gLevel.SIZE) continue
+
+                var currCell = board[i][j]
+                if (currCell.isMine) count++
+
+            }
+            
+        }
+        board[x][y].minesAroundCount = count
     }
-    // if (!board[i][j].isMine) {
-    //     for (var i = i - 1; i <= i + 1; i++) {
-    //         if (i < 0 || i >= board.length) continue
-    
-    //         for (var j = j - 1; j <= j + 1; j++) {
-    //             if (j < 0 || j >= board[i].length) continue
-    //             var currCell = board[i][j]
-    //             if (currCell.isMine) count++
-    //             // console.log(board[i][j]);
-                
-    //         }
-    //     }
-    //     boardcurrCell.minesAroundCount = count
-    // } else {
-    //     return
-    // }
-    
+
 }
+
 
 function cellClicked(elCell, i, j) {
     console.log('hi')
-    console.log(elCell);
+    // elCell.
+    // console.log(elCell.classList);
+    console.log(elCell[i][j])
+    // elCell
 }
 
-
-
-
-
-
-
-    // function checkifShown(board) {
-    //     for (var i = 0; i < gLevel.SIZE; i++) {
-    //         for (var j = 0; j < gLevel.SIZE; j++) {
-    //             console.log(board)
-    //             if (board[i][j].isShown) {
-    //                 board[1][3].isMine = true
-    //                 board[2][2].isMine = true
-    //             }
-    //             // {
-    //             //         board[1][3].isMine = true
-    //             //         board[2][2].isMine = true
-    //             // }
-    //         }
-    //     }
-    // }

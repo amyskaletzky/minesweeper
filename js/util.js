@@ -6,11 +6,15 @@ function renderBoard(board) {
     for (var i = 0; i < gLevel.SIZE; i++) {
         strHTML += `<tr>\n`
         for (var j = 0; j < gLevel.SIZE; j++) {
-          
-            if (board[i][j].isMine && board[i][j].isShown) {
-                strHTML += `<td class="cell" onclick="cellClicked(this)">${MINE}</td>\n` // add onclick later
+            // var dataAttribStr = `data-i="${i}" data-j="${j}"`
+            if (board[i][j].isShown) {
+                if (board[i][j].isMine) {
+                    strHTML += `<td class="cell" onclick="cellClicked(this, ${i}, ${j})">${MINE}</td>\n`
+                } else {
+                    strHTML += `<td class="cell number" onclick="cellClicked(this, ${i}, ${j})">${board[i][j].minesAroundCount}</td>\n`
+                }
             } else {
-                strHTML += `<td class="cell" onclick="cellClicked(this)"></td>\n` // add onclick later  
+                strHTML += `<td class="cell" onclick="cellClicked(this, ${i}, ${j})"></td>\n` 
             }
         }
         strHTML += `<tr>\n`
