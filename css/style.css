@@ -19,7 +19,17 @@ body {
     border: 2px solid pink;
 }
 
-/* table { */
-    /* position: fixed; */
-    /* max-width: 50%; */
-/* } */
+.timer {
+    color: red;
+    
+}
+#list {
+    background-color: pink;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.table {
+    /* background-color:;
+    text-align: center */
+}

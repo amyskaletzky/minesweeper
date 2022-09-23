@@ -1,12 +1,10 @@
 'use strict'
 
 function renderBoard(board) {
-
     var strHTML = ''
     for (var i = 0; i < gLevel.SIZE; i++) {
         strHTML += `<tr>\n`
         for (var j = 0; j < gLevel.SIZE; j++) {
-            // var dataAttribStr = `data-i="${i}" data-j="${j}"`
             if (board[i][j].isShown) {
                 if (board[i][j].isMine) {
                     strHTML += `<td class="cell" onclick="cellClicked(this, ${i}, ${j})">${MINE}</td>\n`
@@ -21,8 +19,15 @@ function renderBoard(board) {
     }
     var elBoard = document.querySelector('.board')
     elBoard.innerHTML = strHTML
-
-
-
+    
+    
+    
     console.log(strHTML);
 }
+
+
+function getRandomInt(min, max) {
+    return Math.floor(Math.random() * (max - min) + min)
+}
+
+// var dataAttribStr = `data-i="${i}" data-j="${j}"`
