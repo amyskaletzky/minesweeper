@@ -1,5 +1,8 @@
+* {
+    margin: auto;
+}
 body {
-    background-color: paleturquoise;
+    background-color: #ffcdb2;
     /* position: relative; */
 }
 
@@ -8,7 +11,7 @@ body {
 } */
 
 .cell {
-    background: radial-gradient(circle, rgba(238, 174, 202, 1) 0%, rgba(148, 187, 233, 1));
+    background-color: #e5989b;
     width: 40px;
     height: 40px;
     border: 2px solid transparent;
@@ -16,20 +19,23 @@ body {
 }
 
 .cell:hover {
-    border: 2px solid pink;
+    border: 2px solid #6d6875;
 }
 
 .timer {
     color: red;
-    
+
 }
+
 #list {
     background-color: pink;
     padding: 10px;
     border-radius: 5px;
 }
 
-.table {
-    /* background-color:;
+/* .table { */
+/* background-color:;
     text-align: center */
-}
+/* } */
+
+/* rgba(238, 174, 202, 1) 0%, */

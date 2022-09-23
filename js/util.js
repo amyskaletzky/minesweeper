@@ -7,12 +7,16 @@ function renderBoard(board) {
         for (var j = 0; j < gLevel.SIZE; j++) {
             if (board[i][j].isShown) {
                 if (board[i][j].isMine) {
-                    strHTML += `<td class="cell" onclick="cellClicked(this, ${i}, ${j})">${MINE}</td>\n`
+                    strHTML += `<td class="cell" onclick="cellClicked(this, ${i}, ${j})" oncontextmenu="cellMarked(this, ${i}, ${j}), event.preventDefault()" contextmenu="mymenu">${MINE}</td>\n` 
                 } else {
-                    strHTML += `<td class="cell number" onclick="cellClicked(this, ${i}, ${j})">${board[i][j].minesAroundCount}</td>\n`
+                    strHTML += `<td class="cell number" onclick="cellClicked(this, ${i}, ${j})" oncontextmenu="cellMarked(this, ${i}, ${j}), event.preventDefault()" contextmenu="mymenu">${board[i][j].minesAroundCount}</td>\n`
                 }
             } else {
-                strHTML += `<td class="cell" onclick="cellClicked(this, ${i}, ${j})"></td>\n` 
+               if (board[i][j].isMarked) {
+                   strHTML += `<td class="cell" onclick="cellClicked(this, ${i}, ${j})" oncontextmenu="cellMarked(this, ${i}, ${j}), event.preventDefault()" contextmenu="mymenu">${FLAG}</td>\n` 
+               } else {
+                   strHTML += `<td class="cell" onclick="cellClicked(this, ${i}, ${j})" oncontextmenu="cellMarked(this, ${i}, ${j}), event.preventDefault()" contextmenu="mymenu"></td>\n` 
+               }
             }
         }
         strHTML += `<tr>\n`
@@ -22,7 +26,7 @@ function renderBoard(board) {
     
     
     
-    console.log(strHTML);
+    // console.log(strHTML);
 }
 
 
