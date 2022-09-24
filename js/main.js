@@ -1,9 +1,7 @@
 'use strict'
 //change name to game later on
-//✴
 
 
-//IVE GIVEN UP
 
 
 // all consts
@@ -21,30 +19,32 @@ var gLevel = {
     SIZE: 4,
     MINES: 2,
 }
-var gGame = {
-    isOn: false,
-    shownCount: 0,
-    markedCount: 0,
-    secsPassed: 0,
-}
 
 
+var gGame
 var gInterval
-var gCount = 0
 var elTimer = document.querySelector('.timer')
 
 
-// functions
+
+
 function initGame() {
+    gGame = {
+        isOn: true,
+        shownCount: 0,
+        markedCount: 0,
+        secsPassed: 0,
+    }
+
+    document.getElementById("emoji").src = "img/regular.png"
     getSelectValue()
     gBoard = buildBoard()
     renderBoard(gBoard)
-    // if (cellClicked) gInterval = setInterval(timer, 1000)
+    // clearInterval(gInterval)
 }
 
 function buildBoard() {
     var board = []
-    var cellCount = 0
     for (var i = 0; i < gLevel.SIZE; i++) {
         board.push([])
         for (var j = 0; j < gLevel.SIZE; j++) {
@@ -54,13 +54,12 @@ function buildBoard() {
                 isMine: false,
                 isMarked: false,
             }
-            cellCount++
 
         }
 
     }
     addMine(board, gLevel.MINES, gLevel.SIZE)
-   
+
     for (var i = 0; i < gLevel.SIZE; i++) {
         for (var j = 0; j < gLevel.SIZE; j++) {
             setMinesNegsCount(board, i, j)
@@ -68,7 +67,6 @@ function buildBoard() {
         }
     }
 
-    console.table(board)
     return board
 }
 
@@ -77,23 +75,18 @@ function addMine(board, mineNums, size) {
     for (var i = 0; i < mineNums; i++) {
         const i = getRandomInt(0, size)
         const j = getRandomInt(0, size)
-        // gBoard[i][j].isMine = true
 
         board[i][j].isMine = true
-        console.log(board[i][j])
 
     }
 
-
     return board
 
-    // gBoard[cell.i][cell.j] = CHERRY
 
 }
 
 
 function setMinesNegsCount(board, x, y) {
-    // console.log(board[x][y].isMine)
     var count = 0
 
     if (!board[x][y].isMine) {
@@ -108,28 +101,84 @@ function setMinesNegsCount(board, x, y) {
             }
 
         }
-        board[x][y].minesAroundCount = count
+        if (count > 0) {
+            board[x][y].minesAroundCount = count
+        } else {
+            board[x][y].minesAroundCount = ''
+        }
     }
 
 }
 
 
 function cellClicked(elCell, i, j) {
-    // gInterval = setInterval(timer, 1000)
-    gBoard[i][j].isShown = true
-    renderBoard(gBoard)
-    gCount++
-    if (gCount === 1) showTimer()
+
+    if (gGame.isOn && !gBoard[i][j].isMarked && !gBoard[i][j].isShown) {
+        if (gGame.shownCount === 0 && elTimer.innerText === '0:00') showTimer()
+        revealCells(i, j)
+        renderBoard(gBoard)
+        if (gBoard[i][j].isMine) gameOver()
+
+
+    } else return
+
+    checkGameOver()
 
 }
 
+
+function revealCells(x, y) {
+    if (gBoard[x][y].minesAroundCount === '') {
+        for (var i = x - 1; i <= x + 1; i++) {
+            if (i < 0 || i >= gLevel.SIZE) continue
+            for (var j = y - 1; j <= y + 1; j++) {
+                if (j < 0 || j >= gLevel.SIZE) continue
+
+                if (!gBoard[i][j].isShown && !gBoard[i][j].isMarked) {
+                    gBoard[i][j].isShown = true
+                    gGame.shownCount++ 
+                    console.log(gGame.shownCount);
+                    console.log(gGame.markedCount);
+                   
+
+                }
+            }
+        }
+    } else {
+        if (!gBoard[x][y].isShown) {
+            gBoard[x][y].isShown = true
+            gGame.shownCount++
+
+        }
+    }
+}
+
+
+
 function cellMarked(elCell, i, j) {
-    gBoard[i][j].isMarked = true
-    renderBoard(gBoard)
+    if (gGame.isOn) {
+        if (!gBoard[i][j].isMarked) {
+            gBoard[i][j].isMarked = true
+            if (gGame.markedCount === 0 && elTimer.innerText === '0:00') showTimer()
+            gGame.markedCount++
+            renderBoard(gBoard)
+            checkGameOver()
+            // console.log(gGame.markedCount)
+
+        } else {
+            gBoard[i][j].isMarked = false
+            renderBoard(gBoard)
+            gGame.markedCount--
+        }
+
+    }
+    // console.log(gGame.markedCount)
+    checkGameOver()
 }
 
 function getSelectValue() {
     var selectedValue = document.getElementById('list').value
+
     if (selectedValue === 'easy') {
         gLevel = {
             SIZE: 4,
@@ -137,7 +186,10 @@ function getSelectValue() {
         }
         elTimer.innerText = '0:00'
         clearInterval(gInterval)
-        gCount = 0
+        gGame.shownCount = 0
+        gGame.markedCount = 0
+        gGame.isOn = true
+
     } else if (selectedValue === 'medium') {
         gLevel = {
             SIZE: 8,
@@ -145,7 +197,10 @@ function getSelectValue() {
         }
         elTimer.innerText = '0:00'
         clearInterval(gInterval)
-        gCount = 0
+        gGame.shownCount = 0
+        gGame.markedCount = 0
+        gGame.isOn = true
+
     } else if (selectedValue === 'hard') {
         gLevel = {
             SIZE: 12,
@@ -153,14 +208,15 @@ function getSelectValue() {
         }
         elTimer.innerText = '0:00'
         clearInterval(gInterval)
-        gCount = 0
+        gGame.shownCount = 0
+        gGame.markedCount = 0
+        gGame.isOn = true
     }
     return gLevel
 }
 
 function showTimer() {
     var initialTime = Date.now()
-
     gInterval = setInterval(function () {
         var differenceInTime = Date.now() - initialTime
         var correctFormat = convertTime(differenceInTime)
@@ -181,7 +237,26 @@ function convertTime(miliseconds) {
     }
 }
 
+function gameOver() {
+    for (var i = 0; i < gLevel.SIZE; i++) {
+        for (var j = 0; j < gLevel.SIZE; j++) {
+            if (gBoard[i][j].isMine) gBoard[i][j].isShown = true
+        }
+    }
+    gGame.isOn = false
+    clearInterval(gInterval)
+    document.getElementById("emoji").src = "img/gameoveremoji.png"
+    renderBoard(gBoard)
+
+}
+
 function checkGameOver() {
-    console.log('hi')
+    if (gGame.shownCount === ((gLevel.SIZE * gLevel.SIZE) - gLevel.MINES) && gGame.markedCount === gLevel.MINES) victory()
+}
+
+function victory() {
+    gGame.isOn = false
+    clearInterval(gInterval)
+    document.getElementById("emoji").src = "img/victoryemoji.png"
 }
 
